@@ -1,0 +1,328 @@
+`passive-income-simulator.html`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Passive Income Simulator - Make CASH While You Sleep</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 2rem;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  section#dashboard {
+    flex: 2;
+    background: rgba(0,0,0,0.3);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  section#dashboard h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: 1.5px;
+  }
+  #cash-display {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #00ff99;
+    letter-spacing: 2px;
+    margin: 1rem 0 2rem 0;
+    text-shadow: 0 0 8px #00ff99;
+  }
+  #status {
+    font-size: 1rem;
+    color: #ccc;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+  }
+  #log {
+    width: 100%;
+    max-width: 600px;
+    height: 160px;
+    background: #111;
+    border-radius: 12px;
+    padding: 1rem;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.85rem;
+    box-shadow: inset 0 0 10px #00ff99;
+  }
+  section#controls {
+    flex: 1;
+    background: rgba(0,0,0,0.3);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  section#controls h2 {
+    font-size: 1.5rem;
+    margin: 0 0 1rem 0;
+    letter-spacing: 1.5px;
+  }
+  label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  select, button {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  select {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  button {
+    background: #00ff99;
+    color: #000;
+    box-shadow: 0 0 8px #00ff99;
+  }
+  button:hover {
+    background: #00cc77;
+  }
+  #toggle-auto-run {
+    background: #ff5555;
+    color: #fff;
+    box-shadow: 0 0 8px #ff5555;
+  }
+  #toggle-auto-run.active {
+    background: #00ff99;
+    color: #000;
+    box-shadow: 0 0 12px #00ff99;
+  }
+  footer {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+    background: rgba(0,0,0,0.2);
+    color: #ddd;
+    letter-spacing: 1px;
+  }
+  /* Scrollbar style for log */
+  #log::-webkit-scrollbar {
+    width: 8px;
+  }
+  #log::-webkit-scrollbar-track {
+    background: #111;
+  }
+  #log::-webkit-scrollbar-thumb {
+    background: #00ff99;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Passive Income Simulator</h1>
+    <p>Make <strong>CASH</strong> while you <em>sleep</em> — with ZERO approval needed</p>
+  </header>
+  <main>
+    <section id="dashboard">
+      <h2>Your Cash Balance</h2>
+      <div id="cash-display">$0.00</div>
+      <div id="status">Status: Idle</div>
+      <div id="log" aria-label="Activity Log" role="log"></div>
+    </section>
+    <section id="controls">
+      <h2>Your Choices</h2>
+      <div>
+        <label for="investment-type">Investment Type:</label>
+        <select id="investment-type" aria-describedby="investment-desc">
+          <option value="stocks">Stocks (Moderate Risk)</option>
+          <option value="crypto">Crypto (High Risk)</option>
+          <option value="realestate">Real Estate (Low Risk)</option>
+          <option value="startup">Startup (Very High Risk)</option>
+        </select>
+        <small id="investment-desc" style="color:#aaa;">Choose your preferred investment vehicle.</small>
+      </div>
+      <div>
+        <label for="risk-level">Risk Level:</label>
+        <select id="risk-level" aria-describedby="risk-desc">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+        <small id="risk-desc" style="color:#aaa;">Adjust your risk appetite to change earnings volatility.</small>
+      </div>
+      <div>
+        <button id="toggle-auto-run" class="active" aria-pressed="true">Auto Run: ON</button>
+      </div>
+      <small style="color:#66ffcc;">The system runs automatically while you sleep. Watch your cash grow!</small>
+    </section>
+  </main>
+  <footer>
+    &copy; 2024 Passive Income Simulator - No Approvals Needed
+  </footer>
+
+<script>
+  (function() {
+    const cashDisplay = document.getElementById('cash-display');
+    const statusEl = document.getElementById('status');
+    const logEl = document.getElementById('log');
+    const investmentTypeSelect = document.getElementById('investment-type');
+    const riskLevelSelect = document.getElementById('risk-level');
+    const toggleAutoRunBtn = document.getElementById('toggle-auto-run');
+
+    let cash = 1000; // start with $1000 virtual capital
+    let autoRun = true;
+
+    // Investment types config: base daily return % (multiplied by risk factor)
+    // and volatility multiplier (for randomness)
+    const investments = {
+      stocks: { baseReturn: 0.001, volatility: 0.5 },
+      crypto: { baseReturn: 0.0025, volatility: 1.5 },
+      realestate: { baseReturn: 0.0007, volatility: 0.2 },
+      startup: { baseReturn: 0.005, volatility: 2.5 }
+    };
+
+    // Risk level multipliers on return and volatility
+    const riskLevels = {
+      low: { returnMult: 0.6, volatilityMult: 0.6 },
+      medium: { returnMult: 1, volatilityMult: 1 },
+      high: { returnMult: 1.6, volatilityMult: 1.8 }
+    };
+
+    // Format cash nicely
+    function formatCash(amount) {
+      return '$' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    // Log activity with timestamp
+    function logActivity(message) {
+      const time = new Date().toLocaleTimeString();
+      const entry = document.createElement('div');
+      entry.textContent = `[${time}] ${message}`;
+      logEl.appendChild(entry);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function updateCash() {
+      if (!autoRun) {
+        statusEl.textContent = 'Status: Paused';
+        return;
+      }
+
+      const investment = investmentTypeSelect.value;
+      const risk = riskLevelSelect.value;
+
+      const base = investments[investment];
+      const riskMult = riskLevels[risk];
+
+      // Calculate daily return percentage
+      let dailyReturnPercent = base.baseReturn * riskMult.returnMult;
+
+      // Add random volatility factor (-volatility to +volatility)
+      const volatility = base.volatility * riskMult.volatilityMult;
+      const volatilityFactor = (Math.random() * 2 - 1) * volatility * 0.001; // smaller random %
+
+      // Effective daily return with volatility
+      dailyReturnPercent += volatilityFactor;
+
+      // Simulate cash growth for one tick (we'll simulate every 2 seconds as 1 hour)
+      // So daily return spread over 12 ticks (24h / 2h per tick)
+      const hourlyRate = dailyReturnPercent / 12;
+
+      const growth = cash * hourlyRate;
+
+      cash += growth;
+
+      // Prevent cash dropping below 0
+      if (cash < 0) cash = 0;
+
+      cashDisplay.textContent = formatCash(cash);
+      statusEl.textContent = `Status: Running | Investment: ${investment.charAt(0).toUpperCase() + investment.slice(1)}, Risk Level: ${risk.charAt(0).toUpperCase() + risk.slice(1)}`;
+
+      // Log big changes +/- > $10
+      if (Math.abs(growth) >= 10) {
+        logActivity(`Cash ${growth >= 0 ? 'increased' : 'decreased'} by ${formatCash(growth)}`);
+      }
+    }
+
+    // Update cash every 2 seconds (simulate hourly growth)
+    let intervalId = setInterval(updateCash, 2000);
+
+    // Toggle auto-run state
+    toggleAutoRunBtn.addEventListener('click', () => {
+      autoRun = !autoRun;
+      toggleAutoRunBtn.classList.toggle('active', autoRun);
+      toggleAutoRunBtn.textContent = `Auto Run: ${autoRun ? 'ON' : 'OFF'}`;
+      toggleAutoRunBtn.setAttribute('aria-pressed', autoRun.toString());
+      if (autoRun) {
+        statusEl.textContent = 'Status: Running';
+        if (!intervalId) {
+          intervalId = setInterval(updateCash, 2000);
+        }
+      } else {
+        statusEl.textContent = 'Status: Paused';
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    });
+
+    // Update immediately on choice change
+    investmentTypeSelect.addEventListener('change', () => {
+      logActivity(`Investment type changed to ${investmentTypeSelect.value}`);
+      updateCash();
+    });
+    riskLevelSelect.addEventListener('change', () => {
+      logActivity(`Risk level changed to ${riskLevelSelect.value}`);
+      updateCash();
+    });
+
+    // Initial display setup
+    cashDisplay.textContent = formatCash(cash);
+    statusEl.textContent = 'Status: Running';
+    logActivity('System started. Initial capital $1,000.00');
+  })();
+</script>
+</body>
+</html>
+
+```
